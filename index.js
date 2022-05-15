@@ -1,5 +1,17 @@
 const express = require('express');
+require('dotenv').config();
+const { PORT, DATABASE_URL } = process.env;
 const app = express();
+
+const mongoose = require('mongoose');
+mongoose.connect(DATABASE_URL);
+
+const db = mongoose.connection
+db.on('open', ()=> console.log('You are connected to MongoDB'));
+db.on('close', ()=> console.log('You are disconnected to MongoDB'));
+db.on('error', (error) => console.log(error));
+
+
 
 app.use(express.json());
 
