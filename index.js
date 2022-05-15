@@ -3,6 +3,7 @@ require('dotenv').config();
 const { PORT, DATABASE_URL } = process.env;
 const app = express();
 
+app.use(express.json());
 const mongoose = require('mongoose');
 mongoose.connect(DATABASE_URL);
 
@@ -11,9 +12,14 @@ db.on('open', ()=> console.log('You are connected to MongoDB'));
 db.on('close', ()=> console.log('You are disconnected to MongoDB'));
 db.on('error', (error) => console.log(error));
 
+const PayerSchema = new mongoose.Schema({
+    payer: String,
+    points: Number
+},
+    { timestamps: true }
+);
+const Payer = mongoose.model("Payer", PayerSchema);
 
-
-app.use(express.json());
 
 let transactions = [
     {
@@ -21,9 +27,9 @@ let transactions = [
     points: 1000
     }
 ]
-app.get('/', (req, res) => {
-    res.send('Hello World')
-});
+// app.get('/', (req, res) => {
+//     res.send('Hello World')
+// });
 app.get('/transactions', (req, res) => {
     res.send(transactions)
 })
